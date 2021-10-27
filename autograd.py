@@ -7,10 +7,10 @@ if torch.cuda.is_available():
 else:
     DEVICE = torch.device('cpu')
 
-BATCH_SIZE=64
-INPUT_SIZE=1000
-HIDDEN_SIZE=100
-OUTPUT_SIZE=10
+BATCH_SIZE=64       #
+INPUT_SIZE=1000     #
+HIDDEN_SIZE=100     #
+OUTPUT_SIZE=10      #
 
 x= torch.randn(BATCH_SIZE,INPUT_SIZE, device = DEVICE, dtype = torch.float,requires_grad = False)
 y= torch.randn(BATCH_SIZE,OUTPUT_SIZE, device = DEVICE, dtype = torch.float,requires_grad = False)
