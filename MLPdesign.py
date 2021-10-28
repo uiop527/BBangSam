@@ -20,7 +20,7 @@ print('Using Pytorch version : ', torch.__version__, 'Device: ', DEVICE)
 
 
 BATCH_SIZE = 32     #BATCH_SIZE: MLP모델을 학습할 떄 필요한 데이터 개수의 단위, 딥러닝 모델에서 파라미터를 업데이트할 때 계산되는 데이터의 계수
-EPOCHS =10          #EPOCHS: Mini-Batch 1개 단위로 Back Propagation을 이용해 가중값 업데이트 <= 여기서 Mini-Batch를 전부 사용하는 횟수
+EPOCHS =10          #EPOCHS: Mini-Batch 1개 단위로 Back Propagation을 이용해 가중치 업데이트 <= 여기서 Mini-Batch를 전부 사용하는 횟수
 
 #사용할 MNIST데이터 다운로드 (MNIST: 사람 손글씨 데이터 베이스)
 #Train set 과 Test set 분리
@@ -29,6 +29,7 @@ train_dataset = datasets.MNIST(root = "../data/MNIST", train = True, download = 
 test_dataset = datasets.MNIST(root = "../data/MNIST", train = False, transform = transforms.ToTensor())
 
 train_loader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size = BATCH_SIZE, shuffle = True)
+
 test_loader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size = BATCH_SIZE, shuffle = False)
 
 #데이터 확인하기1
@@ -49,20 +50,23 @@ for i in range(10):
     plt.imshow(X_train[i, :, :, :].numpy().reshape(28,28), cmap = 'gray_r')
     plt.title('Class: ' + str(y_train[i].item()))
     
-#MLP모델 설계하기
+#MLP(Multi Layer Perception)모델 설계하기
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.fc1 = nn.Linear(28 * 28, 512)
         self.fc2 = nn.Linear(512, 256)
         self.fc3 = nn.Linear(256,10)
+        self.dropout_prob= 0.5
         
     def forward(self,x):
         x = x.view(-1, 28*28)
         x = self.fc1(x)
         x = F.sigmoid(x)
+        x = F.dropout(x, training = self.training, p = self.dropout_prob)
         x = self.fc2(x)
         x = F.sigmoid(x)
+        x = F.dropout(x, training = self.training, p = self.dropout_prob)
         x = self.fc3(x)
         x = F.log_softmax(x, dim = 1)
         return x
