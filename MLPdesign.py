@@ -58,13 +58,17 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(512, 256)
         self.fc3 = nn.Linear(256,10)
         self.dropout_prob= 0.5
+        self.batch_norm1 = nn.BatchNorm1d(512)
+        self.batch_norm2 = nn.BatchNorm1d(256)
         
     def forward(self,x):
         x = x.view(-1, 28*28)
         x = self.fc1(x)
+        x= self.batch_norm1(x)
         x = F.relu(x)
         x = F.dropout(x, training = self.training, p = self.dropout_prob)
         x = self.fc2(x)
+        x = self.batch_norm2(x)
         x = F.relu(x)
         x = F.dropout(x, training = self.training, p = self.dropout_prob)
         x = self.fc3(x)
