@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.nn.init as init
 from torchvision import transforms, datasets
 
 #CUDA버전과 사용하는 DEVICE 출력
@@ -76,8 +77,18 @@ class Net(nn.Module):
         return x
     
 #Optimizer, Objective Function설정하기
+def weight_init(m):
+    if isinstance(m, nn.Linear):
+        init.kaiming_uniform_(m.weight.data)
+#He Initialization적용: ReLU함수를 사용할 때 비효율적으로 보이는 부분을 보완한 초기화 기법
+        
 model = Net().to(DEVICE)
+model.apply(weight_init)
 optimizer = torch.optim.SGD(model.parameters(), lr = 0.01, momentum = 0.5)
+optimizer = torch.optim.Adam(model.parameters(), lr = 0.01)
+#ADAM추가, ADAM: 딥러닝 모델을 디자인할 때 가장 많이 사용하는optimizer
+#optimizer: batch단위로 back propagation하는 과정을 Stochastic Gradient Descent라 하고 이러한 과정을 optimizer라고 한다.
+
 criterion = nn.CrossEntropyLoss()
 
 print(model)
