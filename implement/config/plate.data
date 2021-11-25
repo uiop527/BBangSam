@@ -1,0 +1,6 @@
+classes= 1
+train=data/plate/traindir.txt
+valid=data/plate/validdir.txt
+names=data/plate/plate.names
+backup=backup/
+eval=plate
