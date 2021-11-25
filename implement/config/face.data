@@ -1,0 +1,6 @@
+classes= 1
+train=data/face/traindir.txt
+valid=data/face/validdir.txt
+names=data/face/face.names
+backup=backup/
+eval=face
