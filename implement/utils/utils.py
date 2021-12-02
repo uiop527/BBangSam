@@ -134,11 +134,17 @@ def non_max_suppression(prediction, num_classes, conf_thres=0.5, nms_thres=0.4):
 
     # From (center x, center y, width, height) to (x1, y1, x2, y2)
     box_corner = prediction.new(prediction.shape)
+    #print(box_corner)
+    #print(box_corner.shape)
     box_corner[:, :, 0] = prediction[:, :, 0] - prediction[:, :, 2] / 2
     box_corner[:, :, 1] = prediction[:, :, 1] - prediction[:, :, 3] / 2
     box_corner[:, :, 2] = prediction[:, :, 0] + prediction[:, :, 2] / 2
     box_corner[:, :, 3] = prediction[:, :, 1] + prediction[:, :, 3] / 2
     prediction[:, :, :4] = box_corner[:, :, :4]
+
+    print(prediction)
+    print(prediction.shape)
+    
 
     output = [None for _ in range(len(prediction))]
     for image_i, image_pred in enumerate(prediction):
@@ -146,10 +152,17 @@ def non_max_suppression(prediction, num_classes, conf_thres=0.5, nms_thres=0.4):
         conf_mask = (image_pred[:, 4] >= conf_thres).squeeze()
         image_pred = image_pred[conf_mask]
         # If none are remaining => process next image
+        print("__________________________________________")
+        print(image_pred.shape)
         if not image_pred.size(0):
             continue
         # Get score and class with highest confidence
+        print(image_pred[:, 5 : 5 + num_classes])
+        print("__________________________________________")
+        print(num_classes)
         class_conf, class_pred = torch.max(image_pred[:, 5 : 5 + num_classes], 1, keepdim=True)
+        print(class_conf)
+        print(class_pred)
         # Detections ordered as (x1, y1, x2, y2, obj_conf, class_conf, class_pred)
         detections = torch.cat((image_pred[:, :5], class_conf.float(), class_pred.float()), 1)
         # Iterate through all predicted classes

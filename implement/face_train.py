@@ -19,7 +19,7 @@ from torch.autograd import Variable
 import torch.optim as optim
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--epochs", type=int, default=100, help="number of epochs")
+parser.add_argument("--epochs", type=int, default=1, help="number of epochs")
 parser.add_argument("--batch_size", type=int, default=5, help="size of each image batch")
 parser.add_argument("--model_config_path", type=str, default="config/yolov3face.cfg", help="path to model config file")
 parser.add_argument("--data_config_path", type=str, default="config/face.data", help="path to data config file")
@@ -65,7 +65,7 @@ model.train()
 
 # Get dataloader
 dataloader = torch.utils.data.DataLoader(
-    ListDataset(train_path), batch_size=opt.batch_size, shuffle=True, num_workers=opt.n_cpu
+    ListDataset(train_path), batch_size=opt.batch_size, shuffle=True, num_workers=0
 )
 
 Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
@@ -106,4 +106,4 @@ for epoch in range(opt.epochs):
         model.seen += imgs.size(0)
 
     if epoch % opt.checkpoint_interval == 0:
-        model.save_weights("%s/%d.weights" % (opt.checkpoint_dir, epoch))
+        model.save_weights("face.weights")
