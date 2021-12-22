@@ -15,7 +15,6 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-
 def create_modules(module_defs):
     """
     Constructs module list of layer blocks from module configuration in module_defs

@@ -17,9 +17,12 @@ from torchvision import datasets
 from torchvision import transforms
 from torch.autograd import Variable
 import torch.optim as optim
+import warnings
+
+warnings.filterwarnings(action = 'ignore')
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--epochs", type=int, default=1, help="number of epochs")
+parser.add_argument("--epochs", type=int, default=5, help="number of epochs")
 parser.add_argument("--batch_size", type=int, default=5, help="size of each image batch")
 parser.add_argument("--model_config_path", type=str, default="config/yolov3face.cfg", help="path to model config file")
 parser.add_argument("--data_config_path", type=str, default="config/face.data", help="path to data config file")
@@ -28,7 +31,7 @@ parser.add_argument("--class_path", type=str, default="data/face/face.names", he
 parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
 parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
 parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
-parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
+parser.add_argument("--img_size", type=int, default=640, help="size of each image dimension")
 parser.add_argument("--checkpoint_interval", type=int, default=1, help="interval between saving model weights")
 parser.add_argument("--checkpoint_dir", type=str, default="checkpoints", help="directory where model checkpoints are saved")
 parser.add_argument("--use_cuda", type=bool, default=True, help="whether to use cuda if available")
@@ -106,4 +109,4 @@ for epoch in range(opt.epochs):
         model.seen += imgs.size(0)
 
     if epoch % opt.checkpoint_interval == 0:
-        model.save_weights("face.weights")
+        model.save_weights("%s/%d.weights" % (opt.checkpoint_dir, epoch))

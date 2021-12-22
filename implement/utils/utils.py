@@ -10,7 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-
 def load_classes(path):
     """
     Loads class labels at 'path'
@@ -200,6 +199,7 @@ def non_max_suppression(prediction, num_classes, conf_thres=0.5, nms_thres=0.4):
 def build_targets(
     pred_boxes, pred_conf, pred_cls, target, anchors, num_anchors, num_classes, grid_size, ignore_thres, img_dim
 ):
+
     nB = target.size(0)
     nA = num_anchors
     nC = num_classes
@@ -210,8 +210,10 @@ def build_targets(
     ty = torch.zeros(nB, nA, nG, nG)
     tw = torch.zeros(nB, nA, nG, nG)
     th = torch.zeros(nB, nA, nG, nG)
-    tconf = torch.ByteTensor(nB, nA, nG, nG).fill_(0)
-    tcls = torch.ByteTensor(nB, nA, nG, nG, nC).fill_(0)
+    tconf = torch.BoolTensor(nB, nA, nG, nG).fill_(0)
+    tconf = tconf.bool()
+    tcls = torch.BoolTensor(nB, nA, nG, nG, nC).fill_(0)
+    tcls = tcls.bool()
 
     nGT = 0
     nCorrect = 0
