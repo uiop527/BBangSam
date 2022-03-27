@@ -21,7 +21,7 @@ import matplotlib.patches as patches
 from matplotlib.ticker import NullLocator
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--image_folder', type=str, default='data/facesamples/', help='path to dataset')
+parser.add_argument('--image_folder', type=str, default='data/facesamples', help='path to dataset')
 parser.add_argument('--config_path', type=str, default='config/yolov3face.cfg', help='path to model config file')
 parser.add_argument('--weights_path', type=str, default='checkpoints/face.weights', help='path to weights file')
 parser.add_argument('--class_path', type=str, default='data/face/face.names', help='path to class label file')
@@ -91,6 +91,7 @@ for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
 
     # Create plot
     img = np.array(Image.open(path))
+    #img=cv2.rotate(img,cv2.ROTATE_90_CLOCKWISE)
     plt.figure()
     fig, ax = plt.subplots(1)
     ax.imshow(img)
@@ -141,14 +142,14 @@ for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
             center_x = position_x + int(value_w/2)
             center_y = position_y + int(value_h/2)
             
+            print(center_x)
+            print(center_y)
+            
             #color extract
-            b,g,r = (img[center_y, center_x])
+            r,g,b = (img[center_y, center_x])
             print(r)
             print(g)
             print(b)
-            
-            plt.imshow(img)
-            plt.show()
             
             # Add the bbox to the plot
             ax.add_patch(bbox)
