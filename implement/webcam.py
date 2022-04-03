@@ -9,13 +9,15 @@ if capture.isOpened():
     rval, frame = capture.read()
 else:
     rval = False
+
+i=0
     
 while rval:
     cv2.imshow("VideoFrame", frame)
     rval, frame = capture.read()
     frame = cv2.flip(frame,1) #좌우 반전
     key = cv2.waitKey(20)
-    if key == 27:
+    if key == 27:       #esc
         break
     else:   #guideline 그리기
         #왼쪽 아래 line
@@ -40,7 +42,7 @@ while rval:
         cv2.line(img=frame, pt1=(270, 128), pt2=(280, 128), color=(220, 255, 0), thickness=2, lineType=8, shift=0)
         cv2.line(img=frame, pt1=(290, 128), pt2=(310, 128), color=(220, 255, 0), thickness=2, lineType=8, shift=0)
       
-        #오른쪽 아래 line
+        #오른쪽 아래 line 
         
         cv2.line(img=frame, pt1=(500, 480), pt2=(500, 450), color=(220, 255, 0), thickness=2, lineType=8, shift=0)
         cv2.line(img=frame, pt1=(500, 430), pt2=(500, 400), color=(220, 255, 0), thickness=2, lineType=8, shift=0)
@@ -61,8 +63,12 @@ while rval:
         cv2.line(img=frame, pt1=(390, 130), pt2=(380, 128), color=(220, 255, 0), thickness=2, lineType=8, shift=0)
         cv2.line(img=frame, pt1=(370, 128), pt2=(350, 128), color=(220, 255, 0), thickness=2, lineType=8, shift=0)
         cv2.line(img=frame, pt1=(340, 128), pt2=(320, 128), color=(220, 255, 0), thickness=2, lineType=8, shift=0)
-    
         
+        if(key==32):                #spacebar
+            cv2.imwrite('Picture' + str(i) + '.jpg', frame)
+            i += 1
+            break;
+            
         
 capture.release()
 cv2.destroyAllWindows()
