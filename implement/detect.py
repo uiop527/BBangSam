@@ -1,5 +1,9 @@
 from __future__ import division
 
+from tkinter import *
+from tkinter import messagebox
+import tkinter.font
+
 from models import *
 from utils.utils import *
 from utils.datasets import *
@@ -12,6 +16,7 @@ import argparse
 import cv2
 
 import torch
+
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torch.autograd import Variable
@@ -86,7 +91,7 @@ print ('\nSaving images:')
 
 # Iterate through images and save plot of detections
 for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
-
+    print(path)
     print ("(%d) Image: '%s'" % (img_i, path))
 
     # Create plot
@@ -125,8 +130,7 @@ for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
             bbox = patches.Rectangle((x1, y1), box_w, box_h, linewidth=2,
                                     edgecolor=color,
                                     facecolor='none')
-            
-            
+        
                         
             
             #check bounding box and type casting
@@ -139,6 +143,7 @@ for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
             int_tensor_height=box_h.int()
             value_h = int_tensor_height.item()
             
+            """
             center_x = position_x + int(value_w/2)
             center_y = position_y + int(value_h/2)
             weight = int(value_w)
@@ -189,6 +194,7 @@ for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
             r_sum = 0
             g_sum = 0
             b_sum = 0
+            
             for i in range(0,11):
                 r,g,b = (img[int(positionarr[1][i]), int(positionarr[0][i])])
                 r_sum = r_sum + r
@@ -212,42 +218,63 @@ for img_i, (path, detections) in enumerate(zip(imgs, img_detections)):
                 scg = g_sum/5
                 scb = b_sum/5
            
-          
+            pcolor = ""
+            
             if scg <= 171 and scb <= 131:
                 #skin warm
                 if (hcr + hcg + hcb)/3 > 63:
                     print('spring')
+                    pcolor = 'spring'
                 else:
                     print('fall')
+                    pcolor = 'fall'
             elif scg >= 187 and scb >= 164:
                 #skin cold
                 if (hcr + hcg + hcb)/3 > 63:
                     print('summer')
+                    pcolor = 'summer'
                 else:
                     print('winter')
+                    pcolor = 'winter'
             else:
                 if scb + scg < 327:
                     #skin warm
                     if (hcr + hcg + hcb)/3 > 63:
                         print('spring')
+                        pcolor = 'spring'
                     else:
                         print('fall')
+                        pcolor = 'fall'
                 else:
                     #skin cold
                     if (hcr + hcg + hcb)/3 > 63:
                         print('summer')
+                        pcolor = 'summer'
                     else:
                         print('winter')
-            
+                        pcolor = 'winter'
+            """
             # Add the bbox to the plot
             ax.add_patch(bbox)
             # Add label
             plt.text(x1, y1, s=classes[int(cls_pred)], color='white', verticalalignment='top',
                     bbox={'color': color, 'pad': 0})
-
+            
     # Save generated image with detections
     plt.axis('off')
     plt.gca().xaxis.set_major_locator(NullLocator())
     plt.gca().yaxis.set_major_locator(NullLocator())
     plt.savefig('output/%d.png' % (img_i), bbox_inches='tight', pad_inches=0.0)
     plt.close()
+    """
+root = Tk()
+root.title("Color")
+root.geometry("400x50")
+
+font = tkinter.font.Font(family = "Arial", size = 20, slant="italic")
+lbl = Label(root, text = "당신의 색깔은 " + pcolor + "입니다.", font = font)
+lbl.pack()
+
+    
+root.mainloop()
+    """
